@@ -35,8 +35,8 @@ struct SpreadView: ProcessingView {
                 }
             }
         }
-        .edgesIgnoringSafeArea(.all)
         .drawingGroup()
+        .edgesIgnoringSafeArea(.all)
         .navigationBarHidden(true)
     }
 

@@ -27,8 +27,8 @@ struct TwisterView: ProcessingView {
             .scaleEffect(x: 0.5, y: 1)
             .offset(x: 0, y: 90)
         }
-        .edgesIgnoringSafeArea(.all)
         .drawingGroup()
+        .edgesIgnoringSafeArea(.all)
         .navigationBarHidden(true)
     }
 
@@ -44,18 +44,18 @@ struct TwisterView: ProcessingView {
     }
 
     var animatedOffset: CGFloat {
-        0.25 + (easeInOutSin(easeTriangle(timeCycle(totalFrames: 120))) * 2.5)
+        0.25 + (Ease.inOutSin(Ease.triangle(timeCycle(totalFrames: 120))) * 2.5)
     }
 
     func yOffset(_ i: Int) -> CGFloat {
-        var offset = easeInOutSin(timeCycle(totalFrames: 60, offset: CGFloat(i) * animatedOffset)) * 0.4
+        var offset = Ease.inOutSin(timeCycle(totalFrames: 60, offset: CGFloat(i) * animatedOffset)) * 0.4
         offset += timeCycle(totalFrames: 60, offset: CGFloat(i) * animatedOffset) * 0.6
         return offset * (imageHeight / 2)
     }
 
     func xWobble(_ i: Int) -> CGFloat {
         sin(timeCycle(totalFrames: 120, offset: CGFloat(i) * 4) * .tau) *
-        (easeInOutN(easeTriangle(timeCycle(totalFrames: 120)), power: 4) * 100)
+        (Ease.inOutN(Ease.triangle(timeCycle(totalFrames: 120)), power: 4) * 100)
     }
 }
 

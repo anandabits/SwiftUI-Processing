@@ -36,10 +36,10 @@ struct TrianglesView: ProcessingView {
             makeTriangles(fillColor: color2, scale: 0.001)
             makeTriangles(fillColor: color3, scale: 0.0001)
         }
-        .edgesIgnoringSafeArea(.all)
         .scaleEffect(zoom)
         .rotationEffect(Angle(radians: Double(timeLoop(totalFrames: 180) * .tau / 3.0 + .tau * 0.75)))
         .drawingGroup()
+        .edgesIgnoringSafeArea(.all)
         .navigationBarHidden(true)
     }
 

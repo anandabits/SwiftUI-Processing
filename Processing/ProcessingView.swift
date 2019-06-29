@@ -27,22 +27,6 @@ extension ProcessingView { // Bjango helpers
         ((CGFloat(frameCount) + offset).truncatingRemainder(dividingBy: totalFrames)) / totalFrames
     }
 
-    func easeInOutSin(_ t: CGFloat) -> CGFloat {
-        0.5 + sin(.pi * t - .pi / 2) / 2
-    }
-
-    func easeInOutN(_ t: CGFloat, power: CGFloat) -> CGFloat {
-        t < 0.5
-            ? 0.5 * pow( 2 * t, power)
-            : 1 - 0.5 * pow(2 * (1-t), power)
-    }
-    
-    func easeTriangle(_ t: CGFloat) -> CGFloat {
-        t < 0.5
-            ? t * 2
-            : 2 - (t*2)
-    }
-
     func timeLoop(totalFrames: CGFloat, offset: CGFloat = 0) -> CGFloat {
         (CGFloat(frameCount) + offset).truncatingRemainder(dividingBy: CGFloat(totalFrames)) / CGFloat(totalFrames)
     }

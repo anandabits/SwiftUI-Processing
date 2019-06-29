@@ -43,15 +43,15 @@ struct SpinnerView: ProcessingView {
             Color(.sRGB, red: 25/255, green: 16/255, blue: 48/255, opacity: 1)
         }
         .blendMode(.screen)
-        .edgesIgnoringSafeArea(.all)
         .drawingGroup()
+        .edgesIgnoringSafeArea(.all)
         .navigationBarHidden(true)
     }
 
     func arc(radius: Int, startOffet: Int, endOffset: Int, totalFrames: Int, strokeColor: Color) -> some View {
         let radius = CGFloat(radius)
-        var a = easeInOutN(timeCycle(totalFrames: totalFrames, offset: startOffet), power: 4)
-        var b = easeInOutN(timeCycle(totalFrames: totalFrames, offset: endOffset), power: 5)
+        var a = Ease.inOutN(timeCycle(totalFrames: totalFrames, offset: startOffet), power: 4)
+        var b = Ease.inOutN(timeCycle(totalFrames: totalFrames, offset: endOffset), power: 5)
         let r = timeCycle(totalFrames: totalFrames, offset: 0)
 
         if (a > b) {

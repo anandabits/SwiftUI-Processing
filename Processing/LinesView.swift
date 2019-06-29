@@ -29,6 +29,7 @@ struct LinesView: ProcessingView {
                 .scaleEffect(x: 1.6 + ease, y: 1.6 + ease)
         }
         .drawingGroup()
+        .edgesIgnoringSafeArea(.all)
         .navigationBarHidden(true)
     }
 

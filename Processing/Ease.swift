@@ -22,10 +22,18 @@ enum Ease {
     static func inOutSin(_ t: CGFloat) -> CGFloat {
         0.5 - cos(.pi * t) / 2
     }
+    static func inOutSin2(_ t: CGFloat) -> CGFloat {
+        0.5 + sin(.pi * t - .pi / 2) / 2
+    }
     static func inOutQuint(_ t: CGFloat) -> CGFloat {
         t < 0.5
             ? 16 * t * t * t * t * t
             : 1 + 16 * (t - 1) * t * t * t * t
+    }
+    static func inOutN(_ t: CGFloat, power: CGFloat) -> CGFloat {
+        t < 0.5
+            ? 0.5 * pow( 2 * t, power)
+            : 1 - 0.5 * pow(2 * (1-t), power)
     }
     static func hermite5(_ t: CGFloat) -> CGFloat {
         t * t * t * (t * (t * 6 - 15) + 10)
@@ -41,6 +49,10 @@ enum Ease {
         t < 0.5
             ? t * 2
             : 2 - (t * 2)
+    }
+    static func triange(_ t: CGFloat, iterations: Int) -> CGFloat {
+        let value = (t * CGFloat(iterations) * 2).truncatingRemainder(dividingBy: 2)
+        return value <= 1 ? value : 2 - value
     }
     static func inExp(_ t: CGFloat, power: CGFloat = 2) -> CGFloat {
         pow(t, power)

@@ -10,6 +10,7 @@ import SwiftUI
 
 struct MenuView: View {
     enum Item: String, CaseIterable {
+        case circleOfDots = "Circle of Dots"
         case lines = "Lines"
         case spinner = "Spinner"
         case spread = "Spread"
@@ -18,11 +19,12 @@ struct MenuView: View {
 
         var view: AnyView {
             switch self {
-            case .lines:     return AnyView(LinesView())
-            case .spinner:   return AnyView(SpinnerView())
-            case .spread:    return AnyView(SpreadView())
-            case .triangles: return AnyView(TrianglesView())
-            case .twister:   return AnyView(TwisterView())
+            case .circleOfDots: return AnyView(CircleOfDots())
+            case .lines:        return AnyView(LinesView())
+            case .spinner:      return AnyView(SpinnerView())
+            case .spread:       return AnyView(SpreadView())
+            case .triangles:    return AnyView(TrianglesView())
+            case .twister:      return AnyView(TwisterView())
             }
         }
     }
