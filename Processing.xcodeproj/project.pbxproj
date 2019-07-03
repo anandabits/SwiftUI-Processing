@@ -26,6 +26,7 @@
 		344CA0B322C9649700657951 /* CircleOfDots.swift in Sources */ = {isa = PBXBuildFile; fileRef = 344CA0B222C9649700657951 /* CircleOfDots.swift */; };
 		3455616F22C02C2100A32B02 /* SpreadView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3455616E22C02C2100A32B02 /* SpreadView.swift */; };
 		347F7D3822BA83A20098BAE8 /* TwisterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 347F7D3722BA83A20098BAE8 /* TwisterView.swift */; };
+		34AFCFB022CC2A3C00BF8F6A /* Inspectable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34AFCFAF22CC2A3C00BF8F6A /* Inspectable.swift */; };
 		34DC862E22C4617500C5E824 /* DesignableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34DC862D22C4617500C5E824 /* DesignableView.swift */; };
 /* End PBXBuildFile section */
 
@@ -64,6 +65,7 @@
 		344EE39522C06C7400B2510E /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		3455616E22C02C2100A32B02 /* SpreadView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpreadView.swift; sourceTree = "<group>"; };
 		347F7D3722BA83A20098BAE8 /* TwisterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TwisterView.swift; sourceTree = "<group>"; };
+		34AFCFAF22CC2A3C00BF8F6A /* Inspectable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Inspectable.swift; sourceTree = "<group>"; };
 		34DC862D22C4617500C5E824 /* DesignableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignableView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -121,6 +123,7 @@
 				341768EC22BC711200A8B4E3 /* RenderClock.swift */,
 				343E3A1322BFBC6100FD0EB3 /* Ease.swift */,
 				343E3A1722BFCE2D00FD0EB3 /* PerlinNoise.swift */,
+				34AFCFAF22CC2A3C00BF8F6A /* Inspectable.swift */,
 				343E3A1122BFBBA600FD0EB3 /* SwiftUI+Extensions.swift */,
 				343E3A1522BFC20B00FD0EB3 /* StandardLibrary+Extensions.swift */,
 				343F40F522B741E200D3A3AA /* Assets.xcassets */,
@@ -253,6 +256,7 @@
 				341768EF22BDC67B00A8B4E3 /* MenuView.swift in Sources */,
 				341768ED22BC711200A8B4E3 /* RenderClock.swift in Sources */,
 				343E3A1022BE6CDD00FD0EB3 /* TrianglesView.swift in Sources */,
+				34AFCFB022CC2A3C00BF8F6A /* Inspectable.swift in Sources */,
 				343E3A1A22BFFA1800FD0EB3 /* LinesView.swift in Sources */,
 				343F40F022B741DF00D3A3AA /* AppDelegate.swift in Sources */,
 				341768EB22BC70B900A8B4E3 /* ProcessingView.swift in Sources */,

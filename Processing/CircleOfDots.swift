@@ -76,16 +76,16 @@ struct CircleOfDots: ProcessingView {
         GeometryReader { proxy in
             ZStack {
                 Color.init(.sRGB, red: 25/255, green: 16/255, blue: 48/255, opacity: 1).scaleEffect(2)
-                ForEach(0..<Int(self.numberOfDots.value)) { i in
+                ForEach(0..<Int(self.numberOfDots.wrappedValue)) { i in
                     self.makeCircles(
                         i: CGFloat(i),
-                        from: Ease.hermite5(1 - self.timeBounce(totalFrames: 120, offset: CGFloat(i) / .tau * 120), iterations: 2) * 10 + 80 * self.innerRadius.value,
+                        from: Ease.hermite5(1 - self.timeBounce(totalFrames: 120, offset: CGFloat(i) / .tau * 120), iterations: 2) * 10 + 80 * self.innerRadius.wrappedValue,
                         to: Ease.hermite5(1 - self.timeBounce(totalFrames: 120, offset: CGFloat(i) / .tau * 120 + 60), iterations: 1) * 70 + 90
                     )
                 }.offset(x: proxy.localSize.width / 2, y: proxy.localSize.height / 2)
             }
         }
-        .scaleEffect(Ease.hermite5(1 - timeBounce(totalFrames: self.bounceFrames.value, offset: 0.5)) * 0.4 + 0.8)
+        .scaleEffect(Ease.hermite5(1 - timeBounce(totalFrames: self.bounceFrames.wrappedValue, offset: 0.5)) * 0.4 + 0.8)
         .blendMode(.screen)
         .fullScreenDrawingGroup()
         // Ideally @Inspectable would be detected automatically,
@@ -190,8 +190,8 @@ struct CircleOfDots: ProcessingView {
         path.addEllipse(in: CGRect(
             x: point.x - radius / 2,
             y: point.y - radius / 2,
-            width: radius * dotRadius.value,
-            height: radius * dotRadius.value
+            width: radius * dotRadius.wrappedValue,
+            height: radius * dotRadius.wrappedValue
         ))
     }
 
@@ -222,212 +222,3 @@ struct CircleOfDots_Previews : PreviewProvider {
     }
 }
 #endif
-
-// TODO: Move these helpers to the right file when that doesn't cause a compiler crash
-
-// MARK: - Inspectable
-
-/// A property wrapper that is able to participate in the inspectable preference value
-/// and be edited at runtime using the inspector hud.
-@propertyDelegate
-final class Inspectable<Value>: AnyInspectable {
-    let _makeControl: (Binding<Value>) -> AnyView
-    var value: Value { didSet { didChange.send() } }
-    var delegateValue: Inspectable<Value> { self }
-    init<V: View>(initialValue: Value, label: Text, @ViewBuilder control: @escaping (Binding<Value>) -> V) {
-        self._makeControl = { AnyView(control($0)) }
-        self.value = initialValue
-        super.init()
-        self.label = label
-    }
-    override func makeControl() -> AnyView {
-        let binding = Binding(getValue: { self.value }, setValue: { self.value = $0 })
-        return _makeControl(binding)
-    }
-}
-
-import Combine
-class AnyInspectable: BindableObject {
-    let didChange = PassthroughSubject<Void, Never>()
-    var label = Text("no label")
-    func makeControl() -> AnyView { AnyView(Text("not implemented")) }
-}
-
-extension View {
-    /// Injects the specified inspectables into the inspectable preference value.
-    func inspectables(_ inspectables: AnyInspectable...) -> some View {
-        accumulatingPreference(
-            key: InspectableKey.self,
-            value: inspectables.map(InspectableControl.init)
-        )
-    }
-}
-
-enum InspectableKey: PreferenceKey {
-    static let defaultValue: [InspectableControl] = []
-    static func reduce(value: inout [InspectableControl], nextValue: () -> [InspectableControl]) {
-        value.append(contentsOf: nextValue())
-    }
-}
-
-struct InspectableControl: View, Equatable, Identifiable {
-    @ObjectBinding var base: AnyInspectable
-    var body: some View { base.makeControl() }
-    var label: Text { base.label }
-    var id: ObjectIdentifier { ObjectIdentifier(base) }
-    static func == (lhs: InspectableControl, rhs: InspectableControl) -> Bool {
-        lhs.base === lhs.base
-    }
-}
-
-// MARK: - inspectorHUD
-
-extension View {
-    /// Wraps `self` in a view that dispalys an inspector HUD when tapped.
-    /// All controls injected by descendents using `inspectables` will be presentedx in the hud.
-    func inspectorHUD() -> some View { modifier(InspectorHUDModifier()) }
-}
-struct InspectorHUDModifier: ViewModifier {
-    @State var isShowingInspector = false
-    func body(content: Content) -> some View {
-        content.transformed(if: self.isShowingInspector) { content in
-            content.transformed(with: InspectableKey.self) { content, inspectables in
-                content.overlay(
-                    VStack {
-                        ForEach(inspectables) { inspectable in
-                            // TODO: why doesn't the custom alignment guide work?
-                            HStack {
-                                inspectable.label
-                                    .font(.system(.caption))
-                                    .color(Color(.sRGB, white: 1, opacity: 0.95))
-                                    .alignmentGuide(.hudGutter) { d in d[.trailing] }
-                                inspectable
-                                    .saturation(0)
-                                    .opacity(0.6)
-                                    .alignmentGuide(.hudGutter) { d in d[.leading] }
-                            }
-                        }
-                    }
-                    .padding(.all, 8)
-                    .background(Color(.sRGB, white: 0, opacity: 0.4))
-                    // if this cornerRadius is included then only the last inspector in the stack works
-                    // .cornerRadius(8)
-                    .shadow(color: Color(.sRGB, white: 0, opacity: 0.45), radius: 1, x: 0, y: 0)
-                    .padding(.all, 8)
-                , alignment: .bottom)
-            }
-        }
-        .tapAction {
-            self.isShowingInspector.toggle()
-        }
-    }
-}
-
-extension HorizontalAlignment {
-    private enum HUDGutter: AlignmentID {
-        static func defaultValue(in d: ViewDimensions) -> Length {
-            return d[.leading]
-        }
-    }
-    fileprivate static let hudGutter = HorizontalAlignment(HUDGutter.self)
-}
-
-// MARK: - wrapperPreferenceValue
-
-extension View {
-    /// Reads the specified preference key and transforms the `self` using the preference value.
-    func transformed<Key, Body>(
-        with key: Key.Type = Key.self,
-        @ViewBuilder _ transform: @escaping (Modified<_PreferenceActionModifier<Key>>, Key.Value) -> Body
-    ) -> some View
-        where Key: PreferenceKey,
-              Key.Value: Equatable,
-              Body: View
-    {
-        PreferenceTransform<Key, Self, Body>(base: self, transform: transform)
-    }
-}
-
-struct PreferenceTransform<Key, Base, Body>: View
-    where Key: PreferenceKey,
-          Key.Value: Equatable,
-          Base: View,
-          Body: View {
-
-    typealias Content = Base.Modified<_PreferenceActionModifier<Key>>
-
-    var base: Base
-    var transform: (Content, Key.Value) -> Body
-    @State var preferenceValue = Key.defaultValue
-
-    var body: Body {
-        transform(
-            base.onPreferenceChange(Key.self) { self.preferenceValue = $0 },
-            preferenceValue
-        )
-    }
-}
-
-// MARK: accumulatingPreference
-
-extension View {
-    /// Accumulates the specified preference value with descendent preference values, returning a view with the accumulated preference value.
-    func accumulatingPreference<Key>(
-        key: Key.Type = Key.self,
-        value: Key.Value
-    ) -> some View
-        where Key: PreferenceKey,
-              Key.Value: Equatable {
-        modifier(PreferenceAccumulator<Key>(value: value))
-    }
-}
-
-/// Captures descendent preferences and combines them with the stored preference value.
-struct PreferenceAccumulator<Key>: ViewModifier where Key: PreferenceKey, Key.Value: Equatable {
-    let value: Key.Value
-
-    func body(content: Content) -> some View {
-        content.transformPreference(Key.self) {
-            Key.reduce(value: &$0, nextValue: { self.value })
-        }
-    }
-}
-
-
-// MARK: - ViewBuilder Helpers
-
-extension ViewBuilder {
-    /// Used to enter a ViewBuilder context in an ad-hoc fashion to build a view.
-    ///
-    /// - note: This is especially useful when you want to choose a view based on a condition.
-    static func of<V: View>(@ViewBuilder _ factory: () -> V) -> V {
-        factory()
-    }
-}
-// TODO: rename these transformed and abvove transformed(by preferenceKey)
-extension View {
-    /// Transforms the view if the condition is met, otherwise returns it directly.
-    func transformed<V: View>(if condition: Bool, @ViewBuilder _ transform: (Self) -> V) -> some View {
-        ViewBuilder.of {
-            if condition {
-                transform(self)
-            } else {
-                self
-            }
-        }
-    }
-}
-
-extension View {
-    // TODO: It would be nice to use this from other files but that crashes the compiler.
-    /// Creates a drawing group and hides all system UI
-    func fullScreenDrawingGroup() -> some View {
-        drawingGroup()
-            .edgesIgnoringSafeArea(.all)
-            .navigationBarHidden(true)
-            // this breaks edge swipe so there is no way to go back :(
-            .navigationBarBackButtonHidden(true)
-            // this does not actually work
-            .statusBar(hidden: true)
-    }
-}
