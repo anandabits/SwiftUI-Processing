@@ -32,7 +32,7 @@ struct MenuView: View {
     var body: some View {
         NavigationView {
             List(Item.allCases.identified(by: \.rawValue)) { item in
-                NavigationButton(destination: item.view) { Text(verbatim: item.rawValue) }
+                NavigationLink(destination: item.view) { Text(verbatim: item.rawValue) }
             }
             .navigationBarTitle(Text("SwiftUI Animations"))
         }
