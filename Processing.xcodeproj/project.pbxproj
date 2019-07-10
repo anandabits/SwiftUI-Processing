@@ -87,6 +87,41 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		3417058422D5637100FBF5A7 /* Animations */ = {
+			isa = PBXGroup;
+			children = (
+				344CA0B222C9649700657951 /* CircleOfDots.swift */,
+				343E3A1922BFFA1800FD0EB3 /* LinesView.swift */,
+				341768F222BDD2D800A8B4E3 /* SpinnerView.swift */,
+				3455616E22C02C2100A32B02 /* SpreadView.swift */,
+				343E3A0F22BE6CDD00FD0EB3 /* TrianglesView.swift */,
+				347F7D3722BA83A20098BAE8 /* TwisterView.swift */,
+			);
+			path = Animations;
+			sourceTree = "<group>";
+		};
+		3417058522D5639200FBF5A7 /* AnimationSupport */ = {
+			isa = PBXGroup;
+			children = (
+				343E3A1322BFBC6100FD0EB3 /* Ease.swift */,
+				343E3A1722BFCE2D00FD0EB3 /* PerlinNoise.swift */,
+				341768EA22BC70B900A8B4E3 /* ProcessingView.swift */,
+				341768EC22BC711200A8B4E3 /* RenderClock.swift */,
+			);
+			path = AnimationSupport;
+			sourceTree = "<group>";
+		};
+		3417058622D5640400FBF5A7 /* Utiilty */ = {
+			isa = PBXGroup;
+			children = (
+				34DC862D22C4617500C5E824 /* DesignableView.swift */,
+				34AFCFAF22CC2A3C00BF8F6A /* Inspectable.swift */,
+				343E3A1522BFC20B00FD0EB3 /* StandardLibrary+Extensions.swift */,
+				343E3A1122BFBBA600FD0EB3 /* SwiftUI+Extensions.swift */,
+			);
+			path = Utiilty;
+			sourceTree = "<group>";
+		};
 		343F40E322B741DF00D3A3AA = {
 			isa = PBXGroup;
 			children = (
@@ -111,21 +146,10 @@
 			children = (
 				343F40EF22B741DF00D3A3AA /* AppDelegate.swift */,
 				343F40F122B741DF00D3A3AA /* SceneDelegate.swift */,
-				34DC862D22C4617500C5E824 /* DesignableView.swift */,
 				341768EE22BDC67B00A8B4E3 /* MenuView.swift */,
-				344CA0B222C9649700657951 /* CircleOfDots.swift */,
-				343E3A1922BFFA1800FD0EB3 /* LinesView.swift */,
-				341768F222BDD2D800A8B4E3 /* SpinnerView.swift */,
-				3455616E22C02C2100A32B02 /* SpreadView.swift */,
-				343E3A0F22BE6CDD00FD0EB3 /* TrianglesView.swift */,
-				347F7D3722BA83A20098BAE8 /* TwisterView.swift */,
-				341768EA22BC70B900A8B4E3 /* ProcessingView.swift */,
-				341768EC22BC711200A8B4E3 /* RenderClock.swift */,
-				343E3A1322BFBC6100FD0EB3 /* Ease.swift */,
-				343E3A1722BFCE2D00FD0EB3 /* PerlinNoise.swift */,
-				34AFCFAF22CC2A3C00BF8F6A /* Inspectable.swift */,
-				343E3A1122BFBBA600FD0EB3 /* SwiftUI+Extensions.swift */,
-				343E3A1522BFC20B00FD0EB3 /* StandardLibrary+Extensions.swift */,
+				3417058422D5637100FBF5A7 /* Animations */,
+				3417058522D5639200FBF5A7 /* AnimationSupport */,
+				3417058622D5640400FBF5A7 /* Utiilty */,
 				343F40F522B741E200D3A3AA /* Assets.xcassets */,
 				343F40FA22B741E200D3A3AA /* LaunchScreen.storyboard */,
 				343F40FD22B741E200D3A3AA /* Info.plist */,
