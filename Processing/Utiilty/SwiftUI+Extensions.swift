@@ -107,7 +107,7 @@ struct PreferenceAccumulator<Key>: ViewModifier where Key: PreferenceKey, Key.Va
 }
 
 // MARK: - PreferenceTransform
-
+/*
 extension View {
     /// Reads the specified preference key and transforms the `self` using the preference value.
     func transformed<Key, Body>(
@@ -135,9 +135,12 @@ Body: View {
     @State var preferenceValue = Key.defaultValue
 
     var body: Body {
-        transform(
+        // TODO: SwiftUI adopted an opaque result type for onPreferenceChange
+        fatalError()
+        /*transform(
             base.onPreferenceChange(Key.self) { self.preferenceValue = $0 },
             preferenceValue
-        )
+        )*/
     }
 }
+*/

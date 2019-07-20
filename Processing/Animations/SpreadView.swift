@@ -15,16 +15,18 @@ import SwiftUI
 struct SpreadView: ProcessingView {
     @ObjectBinding var renderClock = RenderClock(framesPerSecond: 30)
 
-    static let text = Text("The stars don’t look bigger, but they do look brighter.")
-        .font(.subheadline)
-        .color(Color.white)
-        .shadow(
-            color: Color(.sRGB, white: 0.4, opacity: 1),
-            radius: 0,
-            x: 0,
-            y: 1
-        )
-        .background(Color.black)
+    static var text: some View {
+        Text("The stars don’t look bigger, but they do look brighter.")
+            .font(.subheadline)
+            .foregroundColor(Color.white)
+            .shadow(
+                color: Color(.sRGB, white: 0.4, opacity: 1),
+                radius: 0,
+                x: 0,
+                y: 1
+            )
+            .background(Color.black)
+    }
 
     var body: some View {
         GeometryReader { proxy in

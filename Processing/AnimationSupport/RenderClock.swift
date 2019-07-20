@@ -11,7 +11,7 @@ import QuartzCore
 import SwiftUI
 
 final class RenderClock: BindableObject {
-    let didChange = PassthroughSubject<Void, Never>()
+    let willChange = PassthroughSubject<Void, Never>()
     var preRenderAction: () -> Void
     private(set) var frameCount = 0
     private(set) var currentTime: CFTimeInterval = 0
@@ -26,8 +26,8 @@ final class RenderClock: BindableObject {
     }
 
     @objc func tick(displaylink: CADisplayLink) {
+        willChange.send()
         frameCount += 1
         currentTime = displaylink.timestamp
-        didChange.send()
     }
 }

@@ -13,8 +13,8 @@ import SwiftUI
 @propertyWrapper
 final class Inspectable<Value>: AnyInspectable {
     let _makeControl: (Binding<Value>) -> AnyView
-    var wrappedValue: Value { didSet { didChange.send() } }
-    var wrapperValue: Inspectable<Value> { self }
+    var wrappedValue: Value { willSet { willChange.send() } }
+    var projectedValue: Inspectable<Value> { self }
     init<V: View>(initialValue: Value, label: Text, @ViewBuilder control: @escaping (Binding<Value>) -> V) {
         self._makeControl = { AnyView(control($0)) }
         self.wrappedValue = initialValue
@@ -29,7 +29,7 @@ final class Inspectable<Value>: AnyInspectable {
 
 import Combine
 class AnyInspectable: BindableObject {
-    let didChange = PassthroughSubject<Void, Never>()
+    let willChange = PassthroughSubject<Void, Never>()
     var label = Text("no label")
     func makeControl() -> AnyView { AnyView(Text("not implemented")) }
 }
@@ -72,15 +72,16 @@ struct InspectorHUDModifier: ViewModifier {
     @State var isShowingInspector = false
     func body(content: Content) -> some View {
         content.transformed(if: self.isShowingInspector) { content in
-            content.transformed(with: InspectableKey.self) { content, inspectables in
-                content.overlay(
+            content.overlayPreferenceValue(InspectableKey.self) { inspectables in
+            //content.transformed(with: InspectableKey.self) { content, inspectables in
+                //content.overlay(
                     VStack {
                         ForEach(inspectables) { inspectable in
                             // TODO: why doesn't the custom alignment guide work?
                             HStack {
                                 inspectable.label
                                     .font(.system(.caption))
-                                    .color(Color(.sRGB, white: 1, opacity: 0.95))
+                                    .foregroundColor(Color(.sRGB, white: 1, opacity: 0.95))
                                     .alignmentGuide(.hudGutter) { d in d[.trailing] }
                                 inspectable
                                     .saturation(0)
@@ -92,10 +93,11 @@ struct InspectorHUDModifier: ViewModifier {
                     .padding(.all, 8)
                         .background(Color(.sRGB, white: 0, opacity: 0.4))
                         // if this cornerRadius is included then only the last inspector in the stack works
-                        // .cornerRadius(8)
+                        //.cornerRadius(8)
                         .shadow(color: Color(.sRGB, white: 0, opacity: 0.45), radius: 1, x: 0, y: 0)
                         .padding(.all, 8)
-                    , alignment: .bottom)
+                        .offset(CGSize(width: 0, height: 240))
+                    //, alignment: .bottom)
             }
         }
         .tapAction {
