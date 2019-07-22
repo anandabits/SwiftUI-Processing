@@ -16,6 +16,13 @@ protocol ProcessingView: View {
 extension ProcessingView {
     var frameCount: Int { renderClock.frameCount }
     var currentTime: CFTimeInterval { renderClock.currentTime }
+    var elapsedTime: CGFloat { CGFloat(renderClock.currentTime - renderClock.startTime) }
+}
+
+extension ProcessingView {
+    func loopPosition(duration: CGFloat, offset: CGFloat = 0) -> CGFloat {
+        (elapsedTime + offset).truncatingRemainder(dividingBy: duration) / duration
+    }
 }
 
 extension ProcessingView { // Bjango helpers
@@ -24,11 +31,11 @@ extension ProcessingView { // Bjango helpers
     }
 
     func timeCycle(totalFrames: CGFloat, offset: CGFloat = 0) -> CGFloat {
-        ((CGFloat(frameCount) + offset).truncatingRemainder(dividingBy: totalFrames)) / totalFrames
+        (CGFloat(frameCount) + offset).truncatingRemainder(dividingBy: totalFrames) / totalFrames
     }
 
     func timeLoop(totalFrames: CGFloat, offset: CGFloat = 0) -> CGFloat {
-        (CGFloat(frameCount) + offset).truncatingRemainder(dividingBy: CGFloat(totalFrames)) / CGFloat(totalFrames)
+        (CGFloat(frameCount) + offset).truncatingRemainder(dividingBy: totalFrames) / totalFrames
     }
 
     func timeRangeLoop(totalFrames: CGFloat, start: CGFloat, end: CGFloat, offset: CGFloat) -> CGFloat {

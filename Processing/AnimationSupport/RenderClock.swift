@@ -14,11 +14,13 @@ final class RenderClock: BindableObject {
     let willChange = PassthroughSubject<Void, Never>()
     var preRenderAction: () -> Void
     private(set) var frameCount = 0
+    private(set) var startTime: CFTimeInterval = 0
     private(set) var currentTime: CFTimeInterval = 0
 
     init(framesPerSecond: Int? = nil, preRenderAction: @escaping () -> Void = {}) {
         self.preRenderAction = preRenderAction
         let link = CADisplayLink(target: self, selector: #selector(tick))
+        startTime = link.timestamp
         if let framesPerSecond = framesPerSecond {
             link.preferredFramesPerSecond = framesPerSecond
         }

@@ -45,6 +45,10 @@ extension Path {
 }
 
 extension View {
+    func frame(_ size: CGSize, alignment: Alignment = .center) -> some View {
+        frame(width: size.width, height: size.height, alignment: alignment)
+    }
+
     /// Creates a drawing group and hides all system UI
     func fullScreenDrawingGroup() -> some View {
         drawingGroup()

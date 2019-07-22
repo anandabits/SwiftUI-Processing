@@ -11,12 +11,17 @@ import SwiftUI
 /// A property wrapper that is able to participate in the inspectable preference value
 /// and be edited at runtime using the inspector hud.
 @propertyWrapper
-final class Inspectable<Value>: AnyInspectable {
+final class Inspectable<Value>: AnyInspectable where Value: _FormatSpecifiable {
     let _makeControl: (Binding<Value>) -> AnyView
     var wrappedValue: Value { willSet { willChange.send() } }
     var projectedValue: Inspectable<Value> { self }
     init<V: View>(initialValue: Value, label: Text, @ViewBuilder control: @escaping (Binding<Value>) -> V) {
-        self._makeControl = { AnyView(control($0)) }
+        self._makeControl = { binding in
+            AnyView(HStack {
+                control(binding)
+                Text("\(binding.value)")
+            }
+        )}
         self.wrappedValue = initialValue
         super.init()
         self.label = label
@@ -84,6 +89,8 @@ struct InspectorHUDModifier: ViewModifier {
                                     .foregroundColor(Color(.sRGB, white: 1, opacity: 0.95))
                                     .alignmentGuide(.hudGutter) { d in d[.trailing] }
                                 inspectable
+                                    .font(.system(.caption))
+                                    .foregroundColor(Color(.sRGB, white: 1, opacity: 0.95))
                                     .saturation(0)
                                     .opacity(0.6)
                                     .alignmentGuide(.hudGutter) { d in d[.leading] }
