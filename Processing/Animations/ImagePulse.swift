@@ -10,44 +10,44 @@ import SwiftUI
 
 struct ImagePulse: ProcessingView {
     @State var isPickingImage = true
-    @State var image = SizedImage(original: Image("twist"), flipped: Image("twist"), size: CGSize(width: 800, height: 1140))
-    @ObjectBinding var renderClock = RenderClock(framesPerSecond: 30)
+    @State var image = SizedImage(image: Image("twist"), size: CGSize(width: 800, height: 1140))
+    @ObservedObject var renderClock = RenderClock(framesPerSecond: 30)
 
     var loopDuration = Inspectable<CGFloat>(
         initialValue: 6,
         label: Text("duration"),
-        control: { Slider(value: $0, from: 1, through: 10) }
+        control: { Slider(value: $0, in: 1...10, label: { Text("duration") }) }
     )
 
     var paintScale = Inspectable<CGFloat>(
         initialValue: 2.45,
         label: Text("paint scale"),
-        control: { Slider(value: $0, from: 0, through: 5) }
+        control: { Slider(value: $0, in: 0...5, label: { Text("paint scale") }) }
     )
 
     var spread = Inspectable<CGFloat>(
         initialValue: 24,
         label: Text("spread"),
-        control: { Slider(value: $0, from: 0, through: 50) }
+        control: { Slider(value: $0, in: 0...50, label: { Text("spread") }) }
     )
 
 
     var rounding = Inspectable<CGFloat>(
         initialValue: 1,
         label: Text("rounding"),
-        control: { Slider(value: $0, from: 0, through: 4, by: 0.00001) }
+        control: { Slider(value: $0, in: 0...4, step: 0.00001, label: { Text("rounding") }) }
     )
 
     var diamondScale = Inspectable<CGFloat>(
         initialValue: 1,
         label: Text("diamond scale"),
-        control: { Slider(value: $0, from: 0, through: 4) }
+        control: { Slider(value: $0, in: 0...4, label: { Text("diamond scale") }) }
     )
 
     var slices = Inspectable<CGFloat>(
         initialValue: 15,
         label: Text("slices"),
-        control: { Slider(value: $0, from: 1, through: 40, by: 1) }
+        control: { Slider(value: $0, in: 1...40, step: 1, label: { Text("slices") }) }
     )
 
     var numberOfSlicesPerAxis: Int {

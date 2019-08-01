@@ -9,8 +9,7 @@
 import SwiftUI
 
 struct SizedImage {
-    let original: Image
-    let flipped: Image
+    let image: Image
     let size: CGSize
 }
 
@@ -61,13 +60,9 @@ extension SizedImage {
         )
 
         let paint = ImagePaint(
-            image: original,
+            image: image,
             sourceRect: sourceRect,
-            scale: (1 / scale) * (1 / sourceRect.width) * size.width / targetSize.width
-            // this provides scale compensation for the vertical axis instead of the horizontal axis
-            // unfortunately, it is only possible to compensate for one axis, hopefully the scale bug
-            // will be fixed soon
-            // scale: scale * (1 / sourceRect.height) * size.height / targetSize.height
+            scale: scale * targetSize.width / size.width
         )
         
         let radius = min(sliceSize.width, sliceSize.height) / 2

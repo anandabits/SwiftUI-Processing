@@ -13,32 +13,12 @@
 import SwiftUI
 
 struct SpinnerView: ProcessingView {
-    @ObjectBinding var renderClock = RenderClock(framesPerSecond: 30)
+    @ObservedObject var renderClock = RenderClock(framesPerSecond: 30)
 
     var body: some View {
         ZStack {
             ForEach(0..<16) { i in
-                self.arc(
-                    radius: i * 24,
-                    startOffet: i,
-                    endOffset: i + 12,
-                    totalFrames: 40,
-                    strokeColor: Color(.sRGB, red: 0, green: 0, blue: 1, opacity: 1)
-                )
-                self.arc(
-                    radius: i * 24,
-                    startOffet: i + 8,
-                    endOffset: i + 20,
-                    totalFrames: 40,
-                    strokeColor: Color(.sRGB, red: 0, green: 1, blue: 0, opacity: 1)
-                )
-                self.arc(
-                    radius: i * 24,
-                    startOffet: i + 16,
-                    endOffset: i + 28,
-                    totalFrames: 40,
-                    strokeColor: Color(.sRGB, red: 1, green: 0, blue: 0, opacity: 1)
-                )
+                self.arcs(atIndex: i)
             }
             Color(.sRGB, red: 25/255, green: 16/255, blue: 48/255, opacity: 1)
         }
@@ -46,6 +26,32 @@ struct SpinnerView: ProcessingView {
         .drawingGroup()
         .edgesIgnoringSafeArea(.all)
         .navigationBarHidden(true)
+    }
+
+    func arcs(atIndex i: Int) -> some View {
+        Group {
+            self.arc(
+                radius: i * 24,
+                startOffet: i,
+                endOffset: i + 12,
+                totalFrames: 40,
+                strokeColor: Color(.sRGB, red: 0, green: 0, blue: 1, opacity: 1)
+            )
+            self.arc(
+                radius: i * 24,
+                startOffet: i + 8,
+                endOffset: i + 20,
+                totalFrames: 40,
+                strokeColor: Color(.sRGB, red: 0, green: 1, blue: 0, opacity: 1)
+            )
+            self.arc(
+                radius: i * 24,
+                startOffet: i + 16,
+                endOffset: i + 28,
+                totalFrames: 40,
+                strokeColor: Color(.sRGB, red: 1, green: 0, blue: 0, opacity: 1)
+            )
+        }
     }
 
     func arc(radius: Int, startOffet: Int, endOffset: Int, totalFrames: Int, strokeColor: Color) -> some View {

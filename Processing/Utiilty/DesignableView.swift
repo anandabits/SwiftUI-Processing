@@ -43,7 +43,7 @@ struct EnvironmentValueCycler<Value>: ViewModifier {
 
     func body(content: Content) -> some View {
         content
-            .tapAction {
+            .onTapGesture {
                 self.index += 1
                 if self.index == self.values.count { self.index = 0 }
             }

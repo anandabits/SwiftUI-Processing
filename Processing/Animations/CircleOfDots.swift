@@ -13,7 +13,7 @@
 import SwiftUI
 
 struct CircleOfDots: ProcessingView {
-    @ObjectBinding var renderClock = RenderClock(framesPerSecond: 24)
+    @ObservedObject var renderClock = RenderClock(framesPerSecond: 24)
 
     // In a `ProcessingView`, `Inspectable` properties *should not* use `@ObjectBinding`
     // even though `Inspectable: BindableObject` because view invalidation needs to be driven
@@ -30,9 +30,9 @@ struct CircleOfDots: ProcessingView {
         label: Text("inner radius"),
         control: { Slider(
             value: $0,
-            from: 0,
-            through: 2,
-            by: 0.01
+            in: 0...2,
+            step: 0.01,
+            label: { Text("inner radius") }
         )}
     )
     var numberOfDots = Inspectable<CGFloat>(
@@ -40,9 +40,9 @@ struct CircleOfDots: ProcessingView {
         label: Text("number of dots"),
         control: { Slider(
             value: $0,
-            from: 0,
-            through: 400,
-            by: 1
+            in: 0...400,
+            step: 1,
+            label: { Text("number of dots") }
         )}
     )
     var dotRadius = Inspectable<CGFloat>(
@@ -50,9 +50,9 @@ struct CircleOfDots: ProcessingView {
         label: Text("dot radius"),
         control: { Slider(
             value: $0,
-            from: 0.2,
-            through: 4,
-            by: 0.1
+            in: 0.2...4,
+            step: 0.1,
+            label: { Text("dot radius") }
         )}
     )
     var bounceFrames = Inspectable<CGFloat>(
@@ -60,9 +60,9 @@ struct CircleOfDots: ProcessingView {
         label: Text("pulse rate"),
         control: { Slider(
             value: $0,
-            from: 120,
-            through: 15,
-            by: -1
+            in: 120...15,
+            step: -1,
+            label: { Text("pulse rate") }
         )}
     )
 

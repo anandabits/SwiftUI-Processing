@@ -38,8 +38,7 @@ struct ImagePicker: UIViewControllerRepresentable {
             let image = info[.editedImage] as? UIImage ?? info[.originalImage] as? UIImage
             completion(image.map { image in
                 return SizedImage(
-                    original: Image(uiImage: image),
-                    flipped: Image(uiImage: image.verticallyFlipped()),
+                    image: Image(uiImage: image),
                     size: image.size
                 )
             })

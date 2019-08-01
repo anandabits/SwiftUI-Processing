@@ -13,7 +13,7 @@
 import SwiftUI
 
 struct SpreadView: ProcessingView {
-    @ObjectBinding var renderClock = RenderClock(framesPerSecond: 30)
+    @ObservedObject var renderClock = RenderClock(framesPerSecond: 30)
 
     static var text: some View {
         Text("The stars don’t look bigger, but they do look brighter.")
@@ -51,7 +51,7 @@ struct SpreadView: ProcessingView {
             .mask(
                 Rectangle()
                     .frame(width: 1, height: size.height)
-                    .position(x: Length(i), y: 0)
+                    .position(x: CGFloat(i), y: 0)
             )
             .offset(
                 x: 0,

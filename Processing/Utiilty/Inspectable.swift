@@ -6,6 +6,7 @@
 //  Copyright © 2019 Anandabits LLC. All rights reserved.
 //
 
+import Combine
 import SwiftUI
 
 /// A property wrapper that is able to participate in the inspectable preference value
@@ -13,7 +14,7 @@ import SwiftUI
 @propertyWrapper
 final class Inspectable<Value>: AnyInspectable where Value: _FormatSpecifiable {
     let _makeControl: (Binding<Value>) -> AnyView
-    var wrappedValue: Value { willSet { willChange.send() } }
+    var wrappedValue: Value { willSet { objectWillChange.send() } }
     var projectedValue: Inspectable<Value> { self }
     init<V: View>(initialValue: Value, label: Text, @ViewBuilder control: @escaping (Binding<Value>) -> V) {
         self._makeControl = { binding in
@@ -27,14 +28,12 @@ final class Inspectable<Value>: AnyInspectable where Value: _FormatSpecifiable {
         self.label = label
     }
     override func makeControl() -> AnyView {
-        let binding = Binding(getValue: { self.wrappedValue }, setValue: { self.wrappedValue = $0 })
+        let binding = Binding(get: { self.wrappedValue }, set: { self.wrappedValue = $0 })
         return _makeControl(binding)
     }
 }
 
-import Combine
-class AnyInspectable: BindableObject {
-    let willChange = PassthroughSubject<Void, Never>()
+class AnyInspectable: ObservableObject {
     var label = Text("no label")
     func makeControl() -> AnyView { AnyView(Text("not implemented")) }
 }
@@ -57,7 +56,7 @@ enum InspectableKey: PreferenceKey {
 }
 
 struct InspectableControl: View, Equatable, Identifiable {
-    @ObjectBinding var base: AnyInspectable
+    @ObservedObject var base: AnyInspectable
     var body: some View { base.makeControl() }
     var label: Text { base.label }
     var id: ObjectIdentifier { ObjectIdentifier(base) }
@@ -78,36 +77,33 @@ struct InspectorHUDModifier: ViewModifier {
     func body(content: Content) -> some View {
         content.transformed(if: self.isShowingInspector) { content in
             content.overlayPreferenceValue(InspectableKey.self) { inspectables in
-            //content.transformed(with: InspectableKey.self) { content, inspectables in
-                //content.overlay(
-                    VStack {
-                        ForEach(inspectables) { inspectable in
-                            // TODO: why doesn't the custom alignment guide work?
-                            HStack {
-                                inspectable.label
-                                    .font(.system(.caption))
-                                    .foregroundColor(Color(.sRGB, white: 1, opacity: 0.95))
-                                    .alignmentGuide(.hudGutter) { d in d[.trailing] }
-                                inspectable
-                                    .font(.system(.caption))
-                                    .foregroundColor(Color(.sRGB, white: 1, opacity: 0.95))
-                                    .saturation(0)
-                                    .opacity(0.6)
-                                    .alignmentGuide(.hudGutter) { d in d[.leading] }
-                            }
+                VStack {
+                    ForEach(inspectables) { inspectable in
+                        // TODO: why doesn't the custom alignment guide work?
+                        HStack {
+                            inspectable.label
+                                .font(.system(.caption))
+                                .foregroundColor(Color(.sRGB, white: 1, opacity: 0.95))
+                                .alignmentGuide(.hudGutter) { d in d[.trailing] }
+                            inspectable
+                                .font(.system(.caption))
+                                .foregroundColor(Color(.sRGB, white: 1, opacity: 0.95))
+                                .saturation(0)
+                                .opacity(0.6)
+                                .alignmentGuide(.hudGutter) { d in d[.leading] }
                         }
                     }
-                    .padding(.all, 8)
-                        .background(Color(.sRGB, white: 0, opacity: 0.4))
-                        // if this cornerRadius is included then only the last inspector in the stack works
-                        //.cornerRadius(8)
-                        .shadow(color: Color(.sRGB, white: 0, opacity: 0.45), radius: 1, x: 0, y: 0)
-                        .padding(.all, 8)
-                        .offset(CGSize(width: 0, height: 240))
-                    //, alignment: .bottom)
+                }
+                .padding(.all, 8)
+                .background(Color(.sRGB, white: 0, opacity: 0.4))
+                // if this cornerRadius is included then only the last inspector in the stack works
+                //.cornerRadius(8)
+                .shadow(color: Color(.sRGB, white: 0, opacity: 0.45), radius: 1, x: 0, y: 0)
+                .padding(.all, 8)
+                .offset(CGSize(width: 0, height: 200))
             }
         }
-        .tapAction {
+        .onTapGesture {
             self.isShowingInspector.toggle()
         }
     }
@@ -115,7 +111,7 @@ struct InspectorHUDModifier: ViewModifier {
 
 extension HorizontalAlignment {
     private enum HUDGutter: AlignmentID {
-        static func defaultValue(in d: ViewDimensions) -> Length {
+        static func defaultValue(in d: ViewDimensions) -> CGFloat {
             return d[.leading]
         }
     }

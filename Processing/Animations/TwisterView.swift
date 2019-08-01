@@ -14,7 +14,7 @@
 import SwiftUI
 
 struct TwisterView: ProcessingView {
-    @ObjectBinding var renderClock = RenderClock(framesPerSecond: 30)
+    @ObservedObject var renderClock = RenderClock(framesPerSecond: 30)
 
     let color = Color(.sRGB, red: 25/255, green: 16/255, blue: 48/255, opacity: 1)
     var body: some View {

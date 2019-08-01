@@ -14,7 +14,7 @@
 import SwiftUI
 
 struct TrianglesView: ProcessingView {
-    @ObjectBinding var renderClock = RenderClock(framesPerSecond: 30)
+    @ObservedObject var renderClock = RenderClock(framesPerSecond: 30)
 
     let backgroundColor = Color(.sRGB, red: 30/255, green: 16/255, blue: 51/255, opacity: 1)
     let color1 = Color(.sRGB, red: 1, green: 235/255, blue: 51/255, opacity: 1)

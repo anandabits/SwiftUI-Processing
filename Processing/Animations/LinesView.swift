@@ -15,7 +15,7 @@
 import SwiftUI
 
 struct LinesView: ProcessingView {
-    @ObjectBinding var renderClock = RenderClock(framesPerSecond: 30)
+    @ObservedObject var renderClock = RenderClock(framesPerSecond: 30)
 
     let backgroundColor = Color(.sRGB, red: 204/255, green: 66/255, blue: 61/255, opacity: 1)
 
