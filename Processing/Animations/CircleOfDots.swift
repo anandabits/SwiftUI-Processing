@@ -60,8 +60,8 @@ struct CircleOfDots: ProcessingView {
         label: Text("pulse rate"),
         control: { Slider(
             value: $0,
-            in: 120...15,
-            step: -1,
+            in: 15...120,
+            step: 1,
             label: { Text("pulse rate") }
         )}
     )

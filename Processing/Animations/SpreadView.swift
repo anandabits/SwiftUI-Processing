@@ -32,7 +32,7 @@ struct SpreadView: ProcessingView {
         GeometryReader { proxy in
             ZStack {
                 Color.black
-                ForEach(0..<Int(proxy.localSize.width.rounded())) { i in
+                ForEach(0..<Int(proxy.localSize.width.rounded()), id: \.self) { i in
                     self.column(at: i, size: proxy.localSize)
                 }
             }

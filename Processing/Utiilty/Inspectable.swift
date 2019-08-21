@@ -20,7 +20,7 @@ final class Inspectable<Value>: AnyInspectable where Value: _FormatSpecifiable {
         self._makeControl = { binding in
             AnyView(HStack {
                 control(binding)
-                Text("\(binding.value)")
+                Text("\(binding.wrappedValue)")
             }
         )}
         self.wrappedValue = initialValue
